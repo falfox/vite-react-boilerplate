@@ -1,0 +1,13 @@
+{
+  "short_name": "SMS Sender",
+  "name": "SMS Sender",
+  "version": "1.0.1",
+  "manifest_version": 2,
+  "browser_action": {},
+  "background": {
+    "scripts": ["assets/background.js"],
+    "persistent": true
+  },
+  "web_accessible_resources": ["/*"],
+  "permissions": ["tabs", "storage", "unlimitedStorage"]
+}

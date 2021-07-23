@@ -1,41 +1,46 @@
-import React, { useState } from "react";
+import React from "react";
+import { QueryClient, useQuery } from "react-query";
+import { Route, Switch } from "react-router";
+import { getUser } from "./api/auth";
+import { ProtectedRoute } from "./components/auth-guard";
+import { Loader } from "./components/loader";
 import "./index.css";
+import ContactsPage from "./pages/contacts";
+import LoginPage from "./pages/login";
+import SenderPage from "./pages/sender";
+import SubscribePage from "./pages/subscribe";
+import { RecipientStores } from "./stores/recipients";
+
+export const queryClient = new QueryClient();
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { data, status } = useQuery("user", getUser);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>Hello Vite + React!</p>
-        <p>
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {" | "}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+    <div className="w-full h-full min-h-screen font-sans text-white bg-gray-800">
+      <Switch>
+        <ProtectedRoute path="/sender">
+          <RecipientStores.Provider>
+            {status === "success" ? (
+              data?.subscription !== null ? (
+                <SenderPage />
+              ) : (
+                <SubscribePage />
+              )
+            ) : status === "loading" ? (
+              <Loader />
+            ) : null}
+          </RecipientStores.Provider>
+        </ProtectedRoute>
+        <ProtectedRoute path="/contacts">
+          <ContactsPage />
+        </ProtectedRoute>
+        <Route path="/login">
+          <LoginPage />
+        </Route>
+
+        <Route path="/template">Template</Route>
+      </Switch>
     </div>
   );
 }

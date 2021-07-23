@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  span {
+    @apply text-base;
+  }
+}
+
+@layer components {
+  input[type="text"].form-input,
+  input[type="password"].form-input,
+  input[type="email"].form-input,
+  input[type="number"].form-input,
+  textarea.form-input {
+    @apply rounded-md shadow-sm focus:ring-indigo-500 sm:text-sm focus:outline-none focus-visible:ring-1;
+  }
+
+  select.form-select {
+    @apply rounded-md shadow-sm focus:ring-indigo-500 sm:text-sm focus:outline-none focus-visible:ring-1;
+  }
+}
